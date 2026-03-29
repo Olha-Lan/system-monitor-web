@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = 'https://localhost:7083/api'
+const API_URL = 'https://system-monitor-api-i6ku.onrender.com/api'
 
 const api = axios.create({
   baseURL: API_URL,

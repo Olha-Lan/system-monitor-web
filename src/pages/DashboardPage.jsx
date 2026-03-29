@@ -67,15 +67,18 @@ export default function DashboardPage() {
           <span style={{ fontSize: 22, color: '#58a6ff' }}>⬡</span>
           <span style={{ fontWeight: 600, fontSize: 16 }}>System Monitor</span>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <span style={{ color: '#8b949e', fontSize: 14 }}>Привіт, {username}</span>
+          <button onClick={() => navigate('/profile')} style={{
+            background: 'transparent', border: '1px solid #30363d',
+            color: '#8b949e', padding: '6px 14px', borderRadius: 8,
+            fontSize: 13, cursor: 'pointer'
+          }}>👤 Профіль</button>
           <button onClick={() => authService.logout()} style={{
             background: 'transparent', border: '1px solid #30363d',
             color: '#f85149', padding: '6px 14px', borderRadius: 8,
             fontSize: 13, cursor: 'pointer'
-          }}>
-            Вийти
-          </button>
+          }}>Вийти</button>
         </div>
       </nav>
 
@@ -107,9 +110,7 @@ export default function DashboardPage() {
               padding: '6px 14px', borderRadius: 8, fontSize: 13,
               background: '#161b22', color: '#58a6ff',
               border: '1px solid #30363d', cursor: 'pointer'
-            }}>
-              ↻
-            </button>
+            }}>↻</button>
           </div>
         </div>
 
@@ -220,12 +221,10 @@ export default function DashboardPage() {
                       tick={{ fill: '#8b949e' }} />
                     <YAxis stroke="#8b949e" fontSize={11}
                       tick={{ fill: '#8b949e' }} domain={[0, 100]} />
-                    <Tooltip
-                      contentStyle={{
-                        background: '#161b22', border: '1px solid #30363d',
-                        borderRadius: 8, color: '#f0f6fc'
-                      }}
-                    />
+                    <Tooltip contentStyle={{
+                      background: '#161b22', border: '1px solid #30363d',
+                      borderRadius: 8, color: '#f0f6fc'
+                    }} />
                     <Line
                       type="monotone"
                       dataKey={chartConfig[activeChart].key}

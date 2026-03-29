@@ -3,6 +3,7 @@ import { authService } from './services/api'
 import LandingPage from './pages/LandingPage'
 import LoginPage from './pages/LoginPage'
 import DashboardPage from './pages/DashboardPage'
+import ProfilePage from './pages/ProfilePage'
 
 function PrivateRoute({ children }) {
   return authService.isAuthenticated() ? children : <Navigate to="/login" />
@@ -17,6 +18,11 @@ function App() {
         <Route path="/dashboard" element={
           <PrivateRoute>
             <DashboardPage />
+          </PrivateRoute>
+        } />
+        <Route path="/profile" element={
+          <PrivateRoute>
+            <ProfilePage />
           </PrivateRoute>
         } />
         <Route path="*" element={<Navigate to="/" />} />

@@ -2,6 +2,8 @@ import { useNavigate } from 'react-router-dom'
 import { useEffect, useRef, useState } from 'react'
 import { authService } from '../services/api'
 
+const EXE_URL = 'https://github.com/Olha-Lan/system-monitor-web/releases/download/v1.0.0/SystemMonitor.exe'
+
 const features = [
   { icon: '⬡', title: 'Реальний моніторинг', desc: 'CPU, RAM, диск та мережа оновлюються кожні 10 секунд' },
   { icon: '◈', title: 'Хмарне зберігання', desc: 'Всі метрики зберігаються на сервері. Дивись історію за тиждень' },
@@ -33,15 +35,15 @@ function AnimatedGrid() {
 
     const createParticles = () => {
       particles = []
-      const count = Math.floor((canvas.width * canvas.height) / 8000)
+      const count = Math.floor((canvas.width * canvas.height) / 5000)
       for (let i = 0; i < count; i++) {
         particles.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
-          vx: (Math.random() - 0.5) * 0.4,
-          vy: (Math.random() - 0.5) * 0.4,
-          size: Math.random() * 2 + 0.5,
-          opacity: Math.random() * 0.5 + 0.3
+          vx: (Math.random() - 0.5) * 0.5,
+          vy: (Math.random() - 0.5) * 0.5,
+          size: Math.random() * 3 + 1,
+          opacity: Math.random() * 0.6 + 0.4
         })
       }
     }
@@ -59,9 +61,9 @@ function AnimatedGrid() {
           const dx = p.x - mouse.x
           const dy = p.y - mouse.y
           const dist = Math.sqrt(dx * dx + dy * dy)
-          if (dist < 100) {
-            p.x += dx / dist * 1.5
-            p.y += dy / dist * 1.5
+          if (dist < 120) {
+            p.x += dx / dist * 2
+            p.y += dy / dist * 2
           }
         }
 
@@ -76,12 +78,12 @@ function AnimatedGrid() {
           const dx = particles[i].x - particles[j].x
           const dy = particles[i].y - particles[j].y
           const dist = Math.sqrt(dx * dx + dy * dy)
-          if (dist < 140) {
+          if (dist < 160) {
             ctx.beginPath()
             ctx.moveTo(particles[i].x, particles[i].y)
             ctx.lineTo(particles[j].x, particles[j].y)
-            ctx.strokeStyle = `rgba(88, 166, 255, ${0.25 * (1 - dist / 140)})`
-            ctx.lineWidth = 0.7
+            ctx.strokeStyle = `rgba(88, 166, 255, ${0.35 * (1 - dist / 160)})`
+            ctx.lineWidth = 1
             ctx.stroke()
           }
         }
@@ -114,7 +116,7 @@ function AnimatedGrid() {
   return (
     <canvas ref={canvasRef} style={{
       position: 'absolute', top: 0, left: 0,
-      width: '100%', height: '100%', opacity: 0.7
+      width: '100%', height: '100%', opacity: 0.9
     }} />
   )
 }
@@ -148,6 +150,14 @@ function RevealSection({ children, delay = 0 }) {
   )
 }
 
+function DownloadBtn({ style }) {
+  return (
+    <a href={EXE_URL} download style={{ textDecoration: 'none' }}>
+      <button style={style}>Скачати .exe ↓</button>
+    </a>
+  )
+}
+
 export default function LandingPage() {
   const navigate = useNavigate()
 
@@ -169,6 +179,7 @@ export default function LandingPage() {
         .feature-card:hover { border-color: rgba(88,166,255,0.4) !important; transform: translateY(-4px); }
         .feature-card { transition: all 0.3s ease !important; }
         .nav-btn:hover { opacity: 0.85; }
+        .dl-btn:hover { background: rgba(255,255,255,0.08) !important; }
       `}</style>
 
       {/* Navbar */}
@@ -206,12 +217,11 @@ export default function LandingPage() {
       }}>
         <AnimatedGrid />
 
-        {/* Glow */}
         <div style={{
           position: 'absolute', top: '30%', left: '50%',
           transform: 'translate(-50%, -50%)',
-          width: 800, height: 400, borderRadius: '50%',
-          background: 'radial-gradient(ellipse, rgba(88,166,255,0.12) 0%, transparent 70%)',
+          width: 900, height: 500, borderRadius: '50%',
+          background: 'radial-gradient(ellipse, rgba(88,166,255,0.18) 0%, transparent 70%)',
           animation: 'pulse 4s ease-in-out infinite',
           pointerEvents: 'none'
         }} />
@@ -256,38 +266,10 @@ export default function LandingPage() {
               onClick={() => navigate('/login?tab=register')}>
               Почати безкоштовно →
             </button>
-            <button style={{ ...btnSecondary, fontSize: 16, padding: '14px 32px' }}>
-              Скачати .exe ↓
-            </button>
+            <DownloadBtn style={{ ...btnSecondary, fontSize: 16, padding: '14px 32px' }} />
           </div>
         </div>
       </section>
-
-      {/* Screenshot */}
-      <RevealSection>
-        <section style={{ padding: '0 48px 96px', maxWidth: 1100, margin: '0 auto' }}>
-          <div style={{
-            border: '1px solid #30363d', borderRadius: 16,
-            overflow: 'hidden', background: '#161b22',
-            boxShadow: '0 0 100px rgba(88,166,255,0.08)'
-          }}>
-            <div style={{
-              background: '#0d1117', padding: '12px 16px',
-              display: 'flex', alignItems: 'center', gap: 8,
-              borderBottom: '1px solid #30363d'
-            }}>
-              <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#ff5f57' }} />
-              <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#febc2e' }} />
-              <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#28c840' }} />
-              <span style={{ marginLeft: 12, fontSize: 12, color: '#8b949e' }}>
-                System Monitor — Головна панель
-              </span>
-            </div>
-            <img src="/screenshots/dashboard.png" alt="Dashboard"
-              style={{ width: '100%', display: 'block' }} />
-          </div>
-        </section>
-      </RevealSection>
 
       {/* Stats */}
       <RevealSection>
@@ -352,38 +334,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Screenshots grid */}
-      <RevealSection>
-        <section style={{ padding: '0 48px 96px', maxWidth: 1100, margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: 48 }}>
-            <h2 style={{ fontSize: 40, fontWeight: 800, letterSpacing: '-1px' }}>
-              Скріншоти програми
-            </h2>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
-            {[
-              { src: '/screenshots/charts.png', label: 'Графіки та історія' },
-              { src: '/screenshots/alerts.png', label: 'Алерти та сповіщення' },
-            ].map(s => (
-              <div key={s.label} style={{
-                border: '1px solid #30363d', borderRadius: 12,
-                overflow: 'hidden', background: '#161b22',
-                transition: 'border-color 0.3s',
-              }}
-                onMouseEnter={e => e.currentTarget.style.borderColor = '#58a6ff44'}
-                onMouseLeave={e => e.currentTarget.style.borderColor = '#30363d'}
-              >
-                <div style={{
-                  padding: '10px 14px', borderBottom: '1px solid #30363d',
-                  fontSize: 12, color: '#8b949e'
-                }}>{s.label}</div>
-                <img src={s.src} alt={s.label} style={{ width: '100%', display: 'block' }} />
-              </div>
-            ))}
-          </div>
-        </section>
-      </RevealSection>
-
       {/* How it works */}
       <section style={{
         padding: '96px 48px', background: '#161b22',
@@ -404,7 +354,7 @@ export default function LandingPage() {
               gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
               gap: 40
             }}>
-              {steps.map((s, i) => (
+              {steps.map((s) => (
                 <div key={s.num} style={{ textAlign: 'center' }}>
                   <div style={{
                     fontSize: 60, fontWeight: 800,
@@ -454,9 +404,7 @@ export default function LandingPage() {
               onClick={() => navigate('/login?tab=register')}>
               Зареєструватись безкоштовно →
             </button>
-            <button style={{ ...btnSecondary, fontSize: 16, padding: '14px 28px' }}>
-              Скачати .exe ↓
-            </button>
+            <DownloadBtn style={{ ...btnSecondary, fontSize: 16, padding: '14px 28px' }} />
           </div>
         </section>
       </RevealSection>
@@ -473,7 +421,7 @@ export default function LandingPage() {
           <span>System Monitor © 2026</span>
         </div>
         <div style={{ display: 'flex', gap: 24 }}>
-          <span>Автор: Оля Ланевич</span>
+          <span>Autor: Olha Lanevych</span>
           <span style={{ color: '#30363d' }}>|</span>
           <span>Дипломна робота 2026</span>
         </div>

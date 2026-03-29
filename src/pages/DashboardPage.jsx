@@ -33,7 +33,7 @@ export default function DashboardPage() {
 
   const latest = metrics[0]
 
-  const chartData = [...metrics].reverse().slice(-100).map(m => ({
+  const chartData = [...metrics].reverse().map(m => ({
     time: new Date(m.timestamp).toLocaleTimeString('uk', {
       hour: '2-digit', minute: '2-digit'
     }),
